@@ -5,6 +5,7 @@ import ProgressSection from './components/ProgressSection'
 import TodoInput from './components/TodoInput'
 import FilterBar from './components/FilterBar'
 import TodoList from './components/TodoList'
+import ChatSection from './components/ChatSection'
 import { classifyTodo } from './api/classify'
 
 const STORAGE_KEY = 'todo-app-items'
@@ -126,6 +127,7 @@ export default function App() {
           <button onClick={clearDone}>완료 항목 삭제</button>
         )}
       </footer>
+      <ChatSection />
     </div>
   )
 }
