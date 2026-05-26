@@ -39,13 +39,15 @@
       padding: 56px 16px;
     }
 
-    .app {
-      width: 100%;
-      max-width: 520px;
-    }
+    .app { width: 100%; max-width: 520px; }
 
-    header {
-      margin-bottom: 6px;
+    /* Header */
+    header { margin-bottom: 6px; }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
 
     header h1 {
@@ -61,8 +63,110 @@
       font-size: 0.8125rem;
       color: var(--text-secondary);
       font-weight: 500;
-      letter-spacing: 0.005em;
     }
+
+    .settings-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .settings-btn:hover { color: var(--accent); border-color: var(--border-focus); }
+    .settings-btn.active { color: var(--accent); background: rgba(99,102,241,.07); border-color: var(--border-focus); }
+
+    /* API Key Panel */
+    .api-key-panel {
+      margin: 14px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+    }
+
+    .api-key-panel.open { display: block; }
+
+    .api-key-panel label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .api-key-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .api-key-row input {
+      flex: 1;
+      padding: 9px 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      border: 1.5px solid rgba(148,163,184,.28);
+      border-radius: 10px;
+      background: rgba(255,255,255,.6);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .api-key-row input:focus { border-color: var(--accent); }
+
+    .api-key-row button {
+      padding: 9px 16px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .api-key-row button:hover { background: var(--accent-hover); }
+
+    .api-key-hint {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .api-key-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .api-key-status.saved { color: var(--done); }
+    .api-key-status.empty { color: var(--text-muted); }
 
     /* Progress */
     .progress-section {
@@ -100,7 +204,7 @@
 
     .progress-track {
       height: 5px;
-      background: rgba(99, 102, 241, 0.1);
+      background: rgba(99,102,241,.1);
       border-radius: 99px;
       overflow: hidden;
     }
@@ -125,7 +229,7 @@
       font-size: 0.9375rem;
       font-family: inherit;
       font-weight: 450;
-      border: 1.5px solid rgba(148, 163, 184, 0.28);
+      border: 1.5px solid rgba(148,163,184,.28);
       border-radius: var(--radius);
       background: var(--surface);
       backdrop-filter: blur(12px);
@@ -139,7 +243,7 @@
     .input-row input::placeholder { color: var(--text-muted); }
     .input-row input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), var(--shadow-sm);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12), var(--shadow-sm);
     }
 
     .input-row button {
@@ -154,14 +258,11 @@
       cursor: pointer;
       transition: background 0.15s, transform 0.1s, box-shadow 0.2s;
       white-space: nowrap;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.32);
+      box-shadow: 0 4px 14px rgba(99,102,241,.32);
       letter-spacing: -0.01em;
     }
 
-    .input-row button:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.42);
-    }
+    .input-row button:hover { background: var(--accent-hover); box-shadow: 0 6px 18px rgba(99,102,241,.42); }
     .input-row button:active { transform: scale(0.97); }
 
     /* Filter */
@@ -196,24 +297,17 @@
     .filter-bar button.active {
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 2px 8px rgba(99,102,241,.3);
     }
 
-    .filter-bar button:not(.active):hover {
-      color: var(--text);
-      background: rgba(99, 102, 241, 0.07);
-    }
+    .filter-bar button:not(.active):hover { color: var(--text); background: rgba(99,102,241,.07); }
 
     /* List */
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .list { display: flex; flex-direction: column; gap: 6px; }
 
     .todo-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
       padding: 14px 16px;
       background: var(--surface);
@@ -246,7 +340,7 @@
       height: 22px;
       min-width: 22px;
       border-radius: 50%;
-      border: 2px solid rgba(148, 163, 184, 0.45);
+      border: 2px solid rgba(148,163,184,.45);
       background: transparent;
       cursor: pointer;
       display: flex;
@@ -254,30 +348,35 @@
       justify-content: center;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       padding: 0;
+      margin-top: 1px;
     }
 
     .todo-item.done .check-btn {
       background: var(--done);
       border-color: var(--done);
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+      box-shadow: 0 0 0 3px rgba(16,185,129,.16);
     }
 
     .check-btn:hover {
       border-color: var(--done);
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(16,185,129,.1);
       transform: scale(1.12);
     }
 
-    .todo-item.done .check-btn:hover {
-      transform: scale(1.08);
-    }
-
+    .todo-item.done .check-btn:hover { transform: scale(1.08); }
     .check-btn svg { display: none; }
     .todo-item.done .check-btn svg { display: block; }
 
-    /* Text */
-    .todo-text {
+    /* Todo content */
+    .todo-content {
       flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .todo-text {
       font-size: 0.9375rem;
       font-weight: 450;
       line-height: 1.45;
@@ -293,7 +392,6 @@
     }
 
     .edit-input {
-      flex: 1;
       font-size: 0.9375rem;
       font-family: inherit;
       font-weight: 450;
@@ -302,7 +400,84 @@
       background: transparent;
       color: var(--text);
       letter-spacing: -0.01em;
+      width: 100%;
     }
+
+    /* AI meta row */
+    .todo-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Category badges */
+    .cat-badge {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .cat-업무 { background: #e0e7ff; color: #4338ca; }
+    .cat-개인 { background: #f3e8ff; color: #7c3aed; }
+    .cat-건강 { background: #dcfce7; color: #16a34a; }
+    .cat-학습 { background: #fef9c3; color: #a16207; }
+    .cat-쇼핑 { background: #ffe4e6; color: #e11d48; }
+    .cat-기타 { background: #f1f5f9; color: #64748b; }
+
+    /* Priority dot */
+    .pri-dot {
+      width: 6px;
+      height: 6px;
+      min-width: 6px;
+      border-radius: 50%;
+    }
+
+    .pri-높음 { background: #ef4444; }
+    .pri-보통 { background: #f59e0b; }
+    .pri-낮음 { background: #10b981; }
+
+    .pri-label {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: -0.01em;
+    }
+
+    /* Tags */
+    .todo-tag {
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(99,102,241,.08);
+      color: var(--accent);
+      letter-spacing: 0.01em;
+    }
+
+    /* Classifying spinner */
+    .classifying-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid rgba(148,163,184,.3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Delete */
     .delete-btn {
@@ -320,11 +495,13 @@
       transition: all 0.15s;
       opacity: 0;
       padding: 0;
+      flex-shrink: 0;
+      margin-top: 1px;
     }
 
     .todo-item:hover .delete-btn { opacity: 1; }
     .delete-btn:hover {
-      background: rgba(244, 63, 94, 0.1);
+      background: rgba(244,63,94,.1);
       color: var(--danger);
       transform: scale(1.12);
     }
@@ -338,11 +515,7 @@
       font-weight: 450;
     }
 
-    .empty span {
-      font-size: 2.25rem;
-      display: block;
-      margin-bottom: 10px;
-    }
+    .empty span { font-size: 2.25rem; display: block; margin-bottom: 10px; }
 
     /* Footer */
     .footer {
@@ -366,7 +539,6 @@
       opacity: 0.6;
       transition: opacity 0.15s;
       font-weight: 500;
-      letter-spacing: -0.01em;
     }
 
     .footer button:hover { opacity: 1; }
@@ -375,9 +547,28 @@
 <body>
 <div class="app">
   <header>
-    <h1>Todo</h1>
-    <p id="date-line"></p>
+    <div class="header-row">
+      <div>
+        <h1>Todo</h1>
+        <p id="date-line"></p>
+      </div>
+      <button class="settings-btn" id="settings-btn" title="Claude API 키 설정">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M13.2 6.4c.1.5.1 1 0 1.5l1.2.9a.5.5 0 0 1 .1.6l-1.2 2a.5.5 0 0 1-.6.2l-1.4-.6c-.4.3-.8.5-1.2.6l-.2 1.5a.5.5 0 0 1-.5.4H7.4a.5.5 0 0 1-.5-.4l-.2-1.5c-.4-.1-.8-.4-1.2-.6l-1.4.6a.5.5 0 0 1-.6-.2l-1.2-2a.5.5 0 0 1 .1-.6l1.2-.9c-.1-.5-.1-1 0-1.5L2.4 5.5a.5.5 0 0 1-.1-.6l1.2-2a.5.5 0 0 1 .6-.2l1.4.6c.4-.3.8-.5 1.2-.6l.2-1.5A.5.5 0 0 1 7.4 1h1.2a.5.5 0 0 1 .5.4l.2 1.5c.4.1.8.4 1.2.6l1.4-.6a.5.5 0 0 1 .6.2l1.2 2a.5.5 0 0 1-.1.6l-1.4.7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
   </header>
+
+  <div class="api-key-panel" id="api-key-panel">
+    <label>Claude API 키 <span id="api-key-status" class="api-key-status empty">미설정</span></label>
+    <div class="api-key-row">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off" />
+      <button id="save-api-key-btn">저장</button>
+    </div>
+    <p class="api-key-hint">키는 브라우저 로컬스토리지에만 저장됩니다. 할 일 추가 시 자동으로 카테고리·우선순위를 분류합니다.</p>
+  </div>
 
   <div class="progress-section">
     <div class="progress-header">
@@ -410,6 +601,7 @@
 
 <script>
   const STORAGE_KEY = 'todo-app-items';
+  const API_KEY_STORAGE = 'anthropic-api-key';
   let todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   let filter = 'all';
   let editingId = null;
@@ -421,20 +613,119 @@
   const dateLine = document.getElementById('date-line');
   const progressFill = document.getElementById('progress-fill');
   const progressPct = document.getElementById('progress-pct');
+  const settingsBtn = document.getElementById('settings-btn');
+  const apiKeyPanel = document.getElementById('api-key-panel');
+  const apiKeyInput = document.getElementById('api-key-input');
+  const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+  const apiKeyStatus = document.getElementById('api-key-status');
 
+  // Date
   const now = new Date();
   dateLine.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
 
+  // Settings panel
+  function updateKeyStatus() {
+    const key = localStorage.getItem(API_KEY_STORAGE);
+    if (key) {
+      apiKeyStatus.textContent = '설정됨 ✓';
+      apiKeyStatus.className = 'api-key-status saved';
+      apiKeyInput.placeholder = '••••••••••••••••••••';
+    } else {
+      apiKeyStatus.textContent = '미설정';
+      apiKeyStatus.className = 'api-key-status empty';
+    }
+  }
+
+  updateKeyStatus();
+
+  settingsBtn.addEventListener('click', () => {
+    const open = apiKeyPanel.classList.toggle('open');
+    settingsBtn.classList.toggle('active', open);
+  });
+
+  saveApiKeyBtn.addEventListener('click', () => {
+    const key = apiKeyInput.value.trim();
+    if (key) {
+      localStorage.setItem(API_KEY_STORAGE, key);
+      apiKeyInput.value = '';
+    } else {
+      localStorage.removeItem(API_KEY_STORAGE);
+    }
+    updateKeyStatus();
+    apiKeyPanel.classList.remove('open');
+    settingsBtn.classList.remove('active');
+  });
+
+  // Claude API classification
+  async function classifyTodo(text) {
+    const apiKey = localStorage.getItem(API_KEY_STORAGE);
+    if (!apiKey) return null;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 128,
+          system: '할 일 텍스트를 분석해서 JSON만 반환하세요. 다른 말 없이 순수 JSON만.',
+          messages: [{
+            role: 'user',
+            content: `분류: "${text}"\n{"category":"업무|개인|건강|학습|쇼핑|기타","priority":"높음|보통|낮음","tags":["태그1"]}  (tags 최대 2개, 없으면 [])`
+          }]
+        })
+      });
+
+      if (!res.ok) return null;
+
+      const data = await res.json();
+      const raw = data.content?.[0]?.text?.trim() || '';
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+      return JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+  }
+
+  // Storage
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }
 
+  // CRUD
   function addTodo(text) {
     text = text.trim();
     if (!text) return;
-    todos.unshift({ id: Date.now(), text, done: false });
+    const todo = { id: Date.now(), text, done: false, category: null, priority: null, tags: [], classifying: false };
+    todos.unshift(todo);
     save();
     render();
+
+    // Async classification
+    if (localStorage.getItem(API_KEY_STORAGE)) {
+      todo.classifying = true;
+      save();
+      render();
+
+      classifyTodo(text).then(result => {
+        const t = todos.find(t => t.id === todo.id);
+        if (!t) return;
+        t.classifying = false;
+        if (result) {
+          t.category = result.category || null;
+          t.priority = result.priority || null;
+          t.tags = Array.isArray(result.tags) ? result.tags.slice(0, 2) : [];
+        }
+        save();
+        render();
+      });
+    }
   }
 
   function toggleTodo(id) {
@@ -464,6 +755,7 @@
     render();
   }
 
+  // Render
   function render() {
     const visible = todos.filter(t => {
       if (filter === 'active') return !t.done;
@@ -478,7 +770,6 @@
 
     progressFill.style.width = pct + '%';
     progressPct.textContent = pct + '%';
-
     countLabel.textContent = `미완료 ${active}개${done ? ` · 완료 ${done}개` : ''}`;
     clearDoneBtn.style.display = done > 0 ? '' : 'none';
 
@@ -497,16 +788,20 @@
     visible.forEach(todo => {
       const item = document.createElement('div');
       item.className = 'todo-item' + (todo.done ? ' done' : '');
-      item.dataset.id = todo.id;
 
+      // Check button
       const checkBtn = document.createElement('button');
       checkBtn.className = 'check-btn';
       checkBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><polyline points="1.5,5.5 4,8.5 9.5,2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
       checkBtn.addEventListener('click', () => toggleTodo(todo.id));
 
-      let textEl;
+      // Content wrapper
+      const content = document.createElement('div');
+      content.className = 'todo-content';
+
+      // Text or edit input
       if (editingId === todo.id) {
-        textEl = document.createElement('input');
+        const textEl = document.createElement('input');
         textEl.className = 'edit-input';
         textEl.value = todo.text;
         textEl.addEventListener('blur', e => commitEdit(todo.id, e.target.value));
@@ -514,23 +809,71 @@
           if (e.key === 'Enter') commitEdit(todo.id, e.target.value);
           if (e.key === 'Escape') { editingId = null; render(); }
         });
+        content.appendChild(textEl);
       } else {
-        textEl = document.createElement('span');
+        const textEl = document.createElement('span');
         textEl.className = 'todo-text';
         textEl.textContent = todo.text;
         textEl.addEventListener('dblclick', () => startEdit(todo.id));
+        content.appendChild(textEl);
       }
 
+      // AI meta
+      if (todo.classifying) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'classifying-row';
+        metaEl.innerHTML = `<div class="spinner"></div><span>AI 분류 중…</span>`;
+        content.appendChild(metaEl);
+      } else if (todo.category || (todo.tags && todo.tags.length > 0)) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'todo-meta';
+
+        if (todo.category) {
+          const catEl = document.createElement('span');
+          const safeCat = ['업무','개인','건강','학습','쇼핑','기타'].includes(todo.category) ? todo.category : '기타';
+          catEl.className = `cat-badge cat-${safeCat}`;
+          catEl.textContent = safeCat;
+          metaEl.appendChild(catEl);
+        }
+
+        if (todo.priority) {
+          const safePri = ['높음','보통','낮음'].includes(todo.priority) ? todo.priority : null;
+          if (safePri) {
+            const dotEl = document.createElement('span');
+            dotEl.className = `pri-dot pri-${safePri}`;
+            dotEl.title = safePri;
+            metaEl.appendChild(dotEl);
+            const labelEl = document.createElement('span');
+            labelEl.className = 'pri-label';
+            labelEl.textContent = safePri;
+            metaEl.appendChild(labelEl);
+          }
+        }
+
+        if (todo.tags && todo.tags.length > 0) {
+          todo.tags.forEach(tag => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'todo-tag';
+            tagEl.textContent = '#' + tag;
+            metaEl.appendChild(tagEl);
+          });
+        }
+
+        content.appendChild(metaEl);
+      }
+
+      // Delete button
       const delBtn = document.createElement('button');
       delBtn.className = 'delete-btn';
       delBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><line x1="1" y1="1" x2="12" y2="12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><line x1="12" y1="1" x2="1" y2="12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>`;
       delBtn.addEventListener('click', () => deleteTodo(todo.id));
 
-      item.append(checkBtn, textEl, delBtn);
+      item.append(checkBtn, content, delBtn);
       listEl.appendChild(item);
     });
   }
 
+  // Add
   document.getElementById('add-btn').addEventListener('click', () => {
     addTodo(newInput.value);
     newInput.value = '';
@@ -544,6 +887,7 @@
     }
   });
 
+  // Filter
   document.querySelectorAll('.filter-bar button').forEach(btn => {
     btn.addEventListener('click', () => {
       filter = btn.dataset.filter;
@@ -553,6 +897,7 @@
     });
   });
 
+  // Clear done
   clearDoneBtn.addEventListener('click', () => {
     if (confirm('완료된 항목을 모두 삭제할까요?')) {
       todos = todos.filter(t => !t.done);
