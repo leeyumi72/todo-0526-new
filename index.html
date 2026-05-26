@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f5f0;
+      --surface: #ffffff;
+      --surface-hover: #fafaf7;
+      --border: #e8e8e4;
+      --text: #1a1a1a;
+      --text-muted: #888;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --danger: #ef4444;
+      --done: #10b981;
+      --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+      --radius: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    header {
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    header p {
+      margin-top: 4px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .input-row input {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 0.9375rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .input-row input::placeholder { color: var(--text-muted); }
+    .input-row input:focus { border-color: var(--accent); }
+
+    .input-row button {
+      padding: 12px 20px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .input-row button:hover { background: var(--accent-hover); }
+    .input-row button:active { transform: scale(0.97); }
+
+    .filter-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .filter-bar button {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-bar button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .filter-bar button:not(.active):hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: opacity 0.2s, border-color 0.2s;
+      animation: slideIn 0.18s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .todo-item.done { opacity: 0.55; }
+
+    .todo-item:hover { background: var(--surface-hover); }
+
+    .check-btn {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      padding: 0;
+    }
+
+    .todo-item.done .check-btn {
+      background: var(--done);
+      border-color: var(--done);
+    }
+
+    .check-btn:hover { border-color: var(--done); }
+
+    .check-btn svg { display: none; }
+    .todo-item.done .check-btn svg { display: block; }
+
+    .todo-text {
+      flex: 1;
+      font-size: 0.9375rem;
+      line-height: 1.4;
+      word-break: break-word;
+      cursor: pointer;
+    }
+
+    .todo-item.done .todo-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .edit-input {
+      flex: 1;
+      font-size: 0.9375rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .delete-btn {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      opacity: 0;
+      padding: 0;
+    }
+
+    .todo-item:hover .delete-btn { opacity: 1; }
+    .delete-btn:hover { background: #fee2e2; color: var(--danger); }
+
+    .empty {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .empty span { font-size: 2rem; display: block; margin-bottom: 8px; }
+
+    .footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .footer button {
+      background: none;
+      border: none;
+      font-size: 0.8125rem;
+      color: var(--danger);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .footer button:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Todo</h1>
+    <p id="date-line"></p>
+  </header>
+
+  <div class="input-row">
+    <input id="new-input" type="text" placeholder="새 할 일 추가..." autocomplete="off" />
+    <button id="add-btn">추가</button>
+  </div>
+
+  <div class="filter-bar">
+    <button class="active" data-filter="all">전체</button>
+    <button data-filter="active">미완료</button>
+    <button data-filter="done">완료</button>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <div class="footer">
+    <span id="count-label"></span>
+    <button id="clear-done-btn" style="display:none">완료 항목 삭제</button>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'todo-app-items';
+  let todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let filter = 'all';
+  let editingId = null;
+
+  const listEl = document.getElementById('list');
+  const newInput = document.getElementById('new-input');
+  const countLabel = document.getElementById('count-label');
+  const clearDoneBtn = document.getElementById('clear-done-btn');
+  const dateLine = document.getElementById('date-line');
+
+  // Date display
+  const now = new Date();
+  dateLine.textContent = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }
+
+  function addTodo(text) {
+    text = text.trim();
+    if (!text) return;
+    todos.unshift({ id: Date.now(), text, done: false });
+    save();
+    render();
+  }
+
+  function toggleTodo(id) {
+    const t = todos.find(t => t.id === id);
+    if (t) { t.done = !t.done; save(); render(); }
+  }
+
+  function deleteTodo(id) {
+    todos = todos.filter(t => t.id !== id);
+    save();
+    render();
+  }
+
+  function startEdit(id) {
+    editingId = id;
+    render();
+    const input = document.querySelector('.edit-input');
+    if (input) { input.focus(); input.select(); }
+  }
+
+  function commitEdit(id, val) {
+    val = val.trim();
+    if (!val) { deleteTodo(id); return; }
+    const t = todos.find(t => t.id === id);
+    if (t) { t.text = val; save(); }
+    editingId = null;
+    render();
+  }
+
+  function render() {
+    const visible = todos.filter(t => {
+      if (filter === 'active') return !t.done;
+      if (filter === 'done') return t.done;
+      return true;
+    });
+
+    const active = todos.filter(t => !t.done).length;
+    const done = todos.filter(t => t.done).length;
+    countLabel.textContent = `미완료 ${active}개${done ? ` · 완료 ${done}개` : ''}`;
+    clearDoneBtn.style.display = done > 0 ? '' : 'none';
+
+    if (visible.length === 0) {
+      const msgs = {
+        all: ['📋', '할 일을 추가해보세요!'],
+        active: ['✅', '미완료 항목이 없어요.'],
+        done: ['🎉', '완료된 항목이 없어요.'],
+      };
+      const [icon, msg] = msgs[filter];
+      listEl.innerHTML = `<div class="empty"><span>${icon}</span>${msg}</div>`;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    visible.forEach(todo => {
+      const item = document.createElement('div');
+      item.className = 'todo-item' + (todo.done ? ' done' : '');
+      item.dataset.id = todo.id;
+
+      const checkBtn = document.createElement('button');
+      checkBtn.className = 'check-btn';
+      checkBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="1.5,6 4.5,9 10.5,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      checkBtn.addEventListener('click', () => toggleTodo(todo.id));
+
+      let textEl;
+      if (editingId === todo.id) {
+        textEl = document.createElement('input');
+        textEl.className = 'edit-input';
+        textEl.value = todo.text;
+        textEl.addEventListener('blur', e => commitEdit(todo.id, e.target.value));
+        textEl.addEventListener('keydown', e => {
+          if (e.key === 'Enter') commitEdit(todo.id, e.target.value);
+          if (e.key === 'Escape') { editingId = null; render(); }
+        });
+      } else {
+        textEl = document.createElement('span');
+        textEl.className = 'todo-text';
+        textEl.textContent = todo.text;
+        textEl.addEventListener('dblclick', () => startEdit(todo.id));
+      }
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+      delBtn.addEventListener('click', () => deleteTodo(todo.id));
+
+      item.append(checkBtn, textEl, delBtn);
+      listEl.appendChild(item);
+    });
+  }
+
+  // Add
+  document.getElementById('add-btn').addEventListener('click', () => {
+    addTodo(newInput.value);
+    newInput.value = '';
+    newInput.focus();
+  });
+
+  newInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      addTodo(newInput.value);
+      newInput.value = '';
+    }
+  });
+
+  // Filter
+  document.querySelectorAll('.filter-bar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filter = btn.dataset.filter;
+      document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+  });
+
+  // Clear done
+  clearDoneBtn.addEventListener('click', () => {
+    if (confirm('완료된 항목을 모두 삭제할까요?')) {
+      todos = todos.filter(t => !t.done);
+      save();
+      render();
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
