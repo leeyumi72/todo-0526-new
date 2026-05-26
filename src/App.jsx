@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import Header from './components/Header'
-import ApiKeyPanel from './components/ApiKeyPanel'
 import ProgressSection from './components/ProgressSection'
 import TodoInput from './components/TodoInput'
 import FilterBar from './components/FilterBar'
@@ -19,10 +18,6 @@ export default function App() {
     JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
   )
   const [filter, setFilter] = useState('all')
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const [apiKey, setApiKey] = useState(() =>
-    localStorage.getItem('anthropic-api-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || ''
-  )
 
   const updateTodos = useCallback((updater) => {
     setTodos(prev => {
@@ -37,28 +32,25 @@ export default function App() {
     if (!text) return
     const todo = {
       id: Date.now(), text, done: false,
-      category: null, priority: null, tags: [], classifying: false,
+      category: null, priority: null, tags: [], classifying: true,
     }
 
-    if (apiKey) {
-      updateTodos(prev => [{ ...todo, classifying: true }, ...prev])
-      classifyTodo(text, apiKey).then(result => {
-        updateTodos(prev => prev.map(t =>
-          t.id === todo.id
-            ? {
-                ...t,
-                classifying: false,
-                category: result?.category || null,
-                priority: result?.priority || null,
-                tags: Array.isArray(result?.tags) ? result.tags.slice(0, 2) : [],
-              }
-            : t
-        ))
-      })
-    } else {
-      updateTodos(prev => [todo, ...prev])
-    }
-  }, [apiKey, updateTodos])
+    updateTodos(prev => [todo, ...prev])
+
+    classifyTodo(text).then(result => {
+      updateTodos(prev => prev.map(t =>
+        t.id === todo.id
+          ? {
+              ...t,
+              classifying: false,
+              category: result?.category || null,
+              priority: result?.priority || null,
+              tags: Array.isArray(result?.tags) ? result.tags.slice(0, 2) : [],
+            }
+          : t
+      ))
+    })
+  }, [updateTodos])
 
   const toggleTodo = useCallback((id) => {
     updateTodos(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
@@ -83,17 +75,6 @@ export default function App() {
     }
   }, [updateTodos])
 
-  const saveApiKey = useCallback((key) => {
-    key = key.trim()
-    if (key) {
-      localStorage.setItem('anthropic-api-key', key)
-    } else {
-      localStorage.removeItem('anthropic-api-key')
-    }
-    setApiKey(key)
-    setSettingsOpen(false)
-  }, [])
-
   const visible = todos.filter(t => {
     if (filter === 'active') return !t.done
     if (filter === 'done') return t.done
@@ -106,11 +87,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header
-        settingsOpen={settingsOpen}
-        onToggleSettings={() => setSettingsOpen(o => !o)}
-      />
-      <ApiKeyPanel open={settingsOpen} apiKey={apiKey} onSave={saveApiKey} />
+      <Header />
       <ProgressSection pct={pct} />
       <TodoInput onAdd={addTodo} />
       <FilterBar filter={filter} onFilter={setFilter} />
